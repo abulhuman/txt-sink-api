@@ -31,6 +31,7 @@ media
 
 # Environments
 .venv
+.py_env
 /.env
 /local
 ENV/

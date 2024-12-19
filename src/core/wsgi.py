@@ -1,5 +1,5 @@
 """
-WSGI config for txt_sink_api_core project.
+WSGI config for core project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'txt_sink_api_core.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'src.core.settings')
 
 application = get_wsgi_application()
