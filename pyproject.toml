@@ -21,6 +21,20 @@ pyyaml = "^6.0.2"
 split-settings = "^1.0.0"
 
 
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^4.0.1"
+
+[tool.isort]
+multi_line_output = 5
+line_length = 120
+
+[tool.yapf]
+based_on_style = "google"
+align_closing_bracket_with_visual_indent = true
+coalesce_brackets = true
+column_limit = 120
+dedent_closing_brackets = true
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

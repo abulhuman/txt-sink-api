@@ -8,6 +8,12 @@ migrate:
 runserver:
 	poetry run python -m src.manage runserver
 
+install-pre-commit:
+	poetry run pre-commit uninstall; poetry run pre-commit install
+
+lint:
+	poetry run pre-commit run --all-files
+
 superuser:
 	poetry run python -m src.manage createsuperuser
 
