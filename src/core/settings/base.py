@@ -10,8 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-from . import BASE_DIR
-
 DEBUG = False
 SECRET_KEY = NotImplemented
 
@@ -62,9 +60,13 @@ WSGI_APPLICATION = "src.core.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'txt_sink_db',
+        'USER': 'txt_sink',
+        'PASSWORD': 'txt_sink',
+        'HOST': 'localhost',
+        'PORT': 3306,
     }
 }
 

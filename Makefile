@@ -1,4 +1,4 @@
-PHONY: install migrate runserver superuser test update
+PHONY: install migrate runserver install-pre-commit lint superuser test update dev-db-up dev-db-down
 install:
 	poetry install
 
@@ -22,3 +22,10 @@ test:
 
 update:
 	install migrate
+
+dev-db-up:
+	test -f .env || touch .env
+	docker compose -f docker-compose.dev.yaml --project-name txt_sink_dev_db up --force-recreate db -d
+
+dev-db-down:
+	docker compose -f docker-compose.dev.yaml --project-name txt_sink_dev_db down
