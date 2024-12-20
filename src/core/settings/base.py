@@ -65,7 +65,7 @@ DATABASES = {
         'NAME': 'txt_sink_db',
         'USER': 'txt_sink',
         'PASSWORD': 'txt_sink',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': 3306,
     }
 }
