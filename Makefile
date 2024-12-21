@@ -1,4 +1,4 @@
-PHONY: install migrate migrations runserver install-pre-commit lint superuser test update dev-db-up dev-db-down
+PHONY: install migrate migrations runserver install-pre-commit lint superuser shell test update dev-db-up dev-db-down
 install:
 	poetry install
 
@@ -20,6 +20,9 @@ lint:
 superuser:
 	poetry run python -m src.manage createsuperuser
 
+shell:
+	poetry run python -m src.manage shell
+
 test:
 	pytest -v --disable-warnings
 
@@ -28,7 +31,7 @@ update:
 
 dev-db-up:
 	test -f .env || touch .env
-	docker compose -f docker-compose.dev.yaml --project-name txt_sink_dev_db up --force-recreate txt_sink_mysql -d
+	docker compose -f docker-compose.dev.yaml --project-name txt_sink_dev_db up -d
 
 dev-db-down:
 	docker compose -f docker-compose.dev.yaml --project-name txt_sink_dev_db down
