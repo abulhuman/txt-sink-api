@@ -1,11 +1,11 @@
 """/files route api handler"""
 
-from logging import Logger
+from logging import getLogger
 
 import boto3
 from botocore.exceptions import NoCredentialsError
 from django.conf import settings
-from django.core.files.uploadedfile import UploadedFile
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import MultiPartParser
 from rest_framework.request import Request
@@ -14,7 +14,7 @@ from rest_framework.response import Response
 from files.models import Files, SearchTags
 from files.serializers import FileDetailSerializer, FileListSerializer
 
-logger = Logger(__name__)
+logger = getLogger(__name__)
 
 s3 = boto3.client(
     "s3",
@@ -31,34 +31,54 @@ s3_bucket_name = settings.AWS_STORAGE_BUCKET_NAME
 @parser_classes([MultiPartParser])
 def upload(request: Request) -> Response:
     """Upload a file"""
-    file: UploadedFile = request.FILES.get("file")
+    file: InMemoryUploadedFile = request.FILES.get("file")
     if not file:
         return Response({"error": "No file provided"}, status=400)
+
+    if not file.content_type == "text/plain":
+        return Response({"error": "Only text('*.txt') files are allowed"}, status=400)
+
+    if file.size <= 512:
+        return Response({"error": "File size should be greater than 0.5KB"}, status=400)
+
+    if file.size >= 2048:
+        return Response({"error": "File size should be less than 2KB"}, status=400)
 
     tags = request.data.get("tags", "")
 
     try:
-        # Read file content into a variable
         file_contents = file.read()
 
-        # Upload the file to S3
         s3_file_name = file.name
-        s3.upload_fileobj(file, s3_bucket_name, s3_file_name)
-
-        # Retrieve the S3 object URI
+        s3.put_object(
+            Bucket=s3_bucket_name,
+            Key=s3_file_name,
+            Body=file_contents,
+            ContentType=file.content_type,
+        )
         s3_object_uri = (
             f"{settings.AWS_S3_ENDPOINT_URL}/{s3_bucket_name}/{s3_file_name}"
             if settings.DEBUG else f"s3://{s3_bucket_name}/{s3_file_name}"
         )
 
-        logger.debug("Uploaded file to S3: %s", s3_object_uri)
-
-        file = Files(file.name, s3_object_uri, file.size, file_contents, tags)
-        logger.debug("Uploading file: %s", file)
+        file = Files(
+            name=file.name,
+            uri=s3_object_uri,
+            size=file.size,
+            contents=file_contents,
+            tags=tags,
+        )
+        file.save()
         for tag in tags.split(","):
-            SearchTags(tag_name=tag, file_id=file.pk)
+            SearchTags(tag_name=tag, file_id=file.id).save()
 
-        return Response({"message": "File uploaded successfully", "s3_uri": s3_object_uri})
+        return Response(
+            {
+                "message": "File uploaded successfully",
+                "s3_uri": s3_object_uri
+            },
+            status=201,
+        )
 
     except NoCredentialsError:
         return Response({"error": "Credentials not available"}, status=400)
@@ -78,18 +98,8 @@ def get_file(_, file_id: int):
 
 
 @api_view(["GET"])
-def list_files(_):
-    """List all files"""
-    files = Files.objects.all()
-    serializer = FileListSerializer(files, many=True)
-    return Response(serializer.data)
-
-
-@api_view(["GET"])
-def search_files(request: Request):
+def list_files(request: Request):
     """Search files by tags"""
-    # logger.warning("[SEARCHING FILES]", request.query_params)
-    print("[SEARCHING FILES]", request.query_params)
     search_by = request.query_params.get("search_by")
     if search_by == "tags":
         return search_files_by_tags(request)
@@ -98,10 +108,9 @@ def search_files(request: Request):
     if search_by == "contents":
         return search_files_by_contents(request)
     if not search_by:
-        return Response(
-            {"error": "No search_by parameter provided. Specify tags, name, or contents"},
-            status=400,
-        )
+        files = Files.objects.all()
+        serializer = FileListSerializer(files, many=True)
+        return Response(serializer.data)
     return Response(
         {"error": "Invalid search_by parameter provided. Specify tags, name, or contents"},
         status=400,
@@ -110,7 +119,7 @@ def search_files(request: Request):
 
 def search_files_by_tags(request: Request):
     """Search files by tags"""
-    tags = request.query_params.get("tags")
+    tags = request.query_params.get("q")
     if not tags:
         return Response({"error": "No tags provided"}, status=400)
 
@@ -122,17 +131,18 @@ def search_files_by_tags(request: Request):
 
 def search_files_by_name(request: Request):
     """Search files by name"""
-    name = request.query_params.get("name")
+    name = request.query_params.get("q")
     if not name:
         return Response({"error": "No name provided"}, status=400)
 
     files = Files.objects.filter(name__contains=name)
-    return Response({"files": files})
+    serializer = FileListSerializer(files, many=True)
+    return Response(serializer.data)
 
 
 def search_files_by_contents(request: Request):
     """Search files by contents"""
-    contents = request.query_params.get("contents")
+    contents = request.query_params.get("q")
     if not contents:
         return Response({"error": "No contents provided"}, status=400)
 

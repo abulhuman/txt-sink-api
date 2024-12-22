@@ -22,7 +22,8 @@ class FileListSerializer(serializers.ModelSerializer):
         """Meta class for the serializer."""
 
         model = Files
-        fields = ["id", "name", "size"]
+        # fields = ["id", "name", "size"]
+        fields = "__all__"
 
 
 class FileCreateSerializer(serializers.ModelSerializer):

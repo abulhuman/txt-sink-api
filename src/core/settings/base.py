@@ -10,10 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+from typing import List
+
 DEBUG = False
 SECRET_KEY = NotImplemented
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
+CORS_ALLOWED_ORIGINS: List[str] = []
 
 # Application definition
 
@@ -26,6 +29,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "drf_spectacular",
+    "corsheaders",
+    "storages",
     "files.apps.FilesConfig",
 ]
 
@@ -37,6 +42,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "src.core.urls"
@@ -111,3 +117,14 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STORAGES = {
+    'default': {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+    'staticfiles': {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "LOCATION": "static",
+    },
+}

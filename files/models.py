@@ -2,8 +2,10 @@
 
 from django.db import models
 
+from src.general.models import CreatedModified
 
-class Files(models.Model):
+
+class Files(CreatedModified):
     """Model for files"""
     id = models.AutoField(primary_key=True)  # noqa A003
     name = models.CharField(max_length=255)
@@ -23,7 +25,7 @@ class Files(models.Model):
         db_table = "files"
 
 
-class SearchTags(models.Model):
+class SearchTags(CreatedModified):
     """Model for search tags"""
     id = models.AutoField(primary_key=True)  # noqa A003
     tag_name = models.CharField(max_length=255)

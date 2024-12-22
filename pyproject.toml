@@ -22,6 +22,7 @@ pyyaml = "^6.0.2"
 split-settings = "^1.0.0"
 drf-spectacular = "^0.28.0"
 django-storages = "^1.14.4"
+django-cors-headers = "^4.6.0"
 
 
 [tool.poetry.group.dev.dependencies]
