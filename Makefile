@@ -29,9 +29,9 @@ test:
 update:
 	install migrate
 
-dev-db-up:
+dev-up:
 	test -f .env || touch .env
-	docker compose -f docker-compose.dev.yaml --project-name txt_sink_dev_db up -d
+	docker compose -f docker-compose.dev.yaml --project-name txt_sink_local_dev up -d
 
-dev-db-down:
-	docker compose -f docker-compose.dev.yaml --project-name txt_sink_dev_db down
+dev-down:
+	docker compose -f docker-compose.dev.yaml --project-name txt_sink_local_dev down
