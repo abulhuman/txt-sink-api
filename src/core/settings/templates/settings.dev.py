@@ -7,7 +7,7 @@ SECRET_KEY = "django-insecure-4#g%fqt_h=uu9bs81iy#pt0jz1rc50f*n_!x4*tl0ol!%#8lv9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "localhost:8000", "localhost:5173", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "localhost:8000", "localhost:5173", "localhost:4173", "127.0.0.1"]
 CORS_ALLOWED_ORIGINS = ["http://" + host for host in ALLOWED_HOSTS] + []
 
 MYSQL_USER = "txt_sink"
