@@ -1,4 +1,4 @@
-PHONY: install migrate migrations runserver install-pre-commit lint superuser shell test update dev-db-up dev-db-down
+PHONY: install migrate migrations start_dev install-pre-commit lint superuser shell test update dev-db-up dev-db-down
 install:
 	poetry install
 
@@ -8,7 +8,7 @@ migrate:
 migrations:
 	poetry run python -m src.manage makemigrations
 
-runserver:
+start_dev:
 	poetry run python -m src.manage runserver
 
 install-pre-commit:
@@ -31,7 +31,10 @@ update:
 
 dev-up:
 	test -f .env || touch .env
-	docker compose -f docker-compose.dev.yaml --project-name txt_sink_local_dev up -d
+	docker compose -f docker-compose.dev.yml --project-name txt_sink_local_dev up -d
 
 dev-down:
-	docker compose -f docker-compose.dev.yaml --project-name txt_sink_local_dev down
+	docker compose -f docker-compose.dev.yml --project-name txt_sink_local_dev down
+
+deploy:
+	poetry run gunicorn src.core.asgi:application -k uvicorn_worker.UvicornWorker

@@ -1,3 +1,5 @@
+""" Settings module for the TXT_SINK_API project. """
+
 import os.path
 from pathlib import Path
 
@@ -24,12 +26,13 @@ if not os.path.isabs(LOCAL_SETTINGS_PATH):
 include(
     "base.py",
     "setting_logging.py",
-    "rest_framework.py",
-    # 'aws.py',
-    "custom.py",
-    "envvars.py",
-    "docker.py",
     optional(LOCAL_SETTINGS_PATH),
+    "aws.py",
+    "rest_framework.py",
+    "custom.py",
+    # "docker.py",
+    "envvars.py",
+    "rds_db.py",
 )
 
 # if not is_pytest_running():

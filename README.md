@@ -61,5 +61,5 @@ make superuser
 ### 7. Start development
 
 ```bash
-make runserver
+make start_dev
 ```
