@@ -1,0 +1,11 @@
+.mypy_cache
+.py_env
+.vscode
+local
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+*.pyzw

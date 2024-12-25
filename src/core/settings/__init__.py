@@ -1,4 +1,4 @@
-""" Settings module for the TXT_SINK_API project. """
+"""Settings module for the TXT_SINK_API project."""
 
 import os.path
 from pathlib import Path
@@ -26,8 +26,9 @@ if not os.path.isabs(LOCAL_SETTINGS_PATH):
 include(
     "base.py",
     "setting_logging.py",
-    optional(LOCAL_SETTINGS_PATH),
     "aws.py",
+    "prod.py",
+    optional(LOCAL_SETTINGS_PATH),
     "rest_framework.py",
     "custom.py",
     # "docker.py",

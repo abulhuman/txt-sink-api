@@ -36,5 +36,8 @@ dev-up:
 dev-down:
 	docker compose -f docker-compose.dev.yml --project-name txt_sink_local_dev down
 
+build:
+	docker build -t cisco_test_project/txt-sink-api .
+
 deploy:
 	poetry run gunicorn src.core.asgi:application -k uvicorn_worker.UvicornWorker

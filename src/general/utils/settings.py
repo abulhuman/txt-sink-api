@@ -1,3 +1,5 @@
+""" This module provides utility functions for working with settings. """
+
 import os
 
 from .misc import yaml_coerce
@@ -19,4 +21,9 @@ def get_settings_from_environment(prefix):
         dict: A dictionary containing the settings derived from the environment variables.
     """
     prefix_len = len(prefix)
-    return {key[prefix_len:]: yaml_coerce(value) for key, value in os.environ.items() if key.startswith(prefix)}
+
+    settings = {}
+    for key, value in os.environ.items():
+        if key.startswith(prefix):
+            settings[key[prefix_len:]] = yaml_coerce(value)
+    return settings

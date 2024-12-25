@@ -1,5 +1,5 @@
-# Use the official Python image from the Docker Hub
-FROM python:3.12-slim
+# Use the official Ubuntu Focal image from the Docker Hub
+FROM ubuntu:noble-20241118.1
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -9,23 +9,29 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Install dependencies
-RUN set -xe && \
-  apt-get update && \
-  apt-get install -y --no-install-recommends build-essential && \
-  python -m pip install virtualenvwrapper poetry==1.8.5
+RUN apt update && apt upgrade -y && \
+  apt install -y software-properties-common && \
+  add-apt-repository ppa:deadsnakes/ppa && \
+  apt update && \
+  apt install -y python3.12 python3.12-venv pipx python3-pip pkg-config libmysqlclient-dev
+# RUN pipx ensurepath
 
-# Clean up APT when done
-RUN apt-get clean && \
+
+# Install Poetry
+RUN pipx install poetry==1.8.5 
+RUN pipx ensurepath &&\ 
+  apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
-# Install Uvicorn and Gunicorn
-RUN python -m pip install uvicorn uvicorn-worker gunicorn
+RUN echo $VIRTUAL_ENV
 
 # Copy only the necessary files for dependency installation
 COPY pyproject.toml poetry.lock /app/
 
 # Install dependencies
-RUN poetry install --no-root
+RUN  /root/.local/bin/poetry install --no-root
+
+RUN echo $VIRTUAL_ENV
 
 # Copy the rest of the project files
 COPY . /app/
