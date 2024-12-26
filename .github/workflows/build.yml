@@ -49,5 +49,5 @@ jobs:
           DJANGO_SUPERUSER_PASSWORD: ${{ secrets.DJANGO_SUPERUSER_PASSWORD }}
           DJANGO_SUPERUSER_EMAIL: ${{ secrets.DJANGO_SUPERUSER_EMAIL }}
         run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          docker build -t $ECR_REGISTRY/$REPOSITORY_NAME:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$REPOSITORY_NAME:$IMAGE_TAG
