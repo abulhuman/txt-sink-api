@@ -33,6 +33,7 @@ media
 .venv
 .py_env
 /.env*
+/.*.env*
 /local
 ENV/
 env.bak/

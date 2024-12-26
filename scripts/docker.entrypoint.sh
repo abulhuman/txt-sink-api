@@ -10,4 +10,7 @@ RUN_MANAGE_PY='/root/.local/bin/poetry run python -m src.manage'
 echo 'Running migrations...'
 $RUN_MANAGE_PY migrate --no-input
 
+echo 'Creating superuser...'
+$RUN_MANAGE_PY createsuperuser --no-input || echo 'Superuser already exists.'
+
 exec make deploy
