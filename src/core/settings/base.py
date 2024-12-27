@@ -43,6 +43,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
+    "src.core.middlewares.ALBSubnetDynamicAllowedHostsMiddleware",
 ]
 
 ROOT_URLCONF = "src.core.urls"
