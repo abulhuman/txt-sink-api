@@ -20,6 +20,8 @@ echo 'Running migrations...'
 $RUN_MANAGE_PY migrate --no-input
 
 echo 'Creating superuser...'
-$RUN_MANAGE_PY createsuperuser --no-input || echo 'Superuser already exists.'
+DJANGO_SUPERUSER_PASSWORD=$TXT_SINK_SETTINGS_DJANGO_SUPERUSER_PASSWORD $RUN_MANAGE_PY createsuperuser --no-input \
+--username $TXT_SINK_SETTINGS_DJANGO_SUPERUSER_USERNAME --email $TXT_SINK_SETTINGS_DJANGO_SUPERUSER_EMAIL || echo 'Superuser already exists.'
 
-exec $RUN_MANAGE_PY run gunicorn src.core.asgi:application -k uvicorn_worker.UvicornWorker
+exec /root/.local/bin/poetry run gunicorn src.core.asgi:application -k uvicorn_worker.UvicornWorker 
+
