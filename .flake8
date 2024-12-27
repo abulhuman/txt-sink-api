@@ -7,7 +7,8 @@ exclude =
     __pycache__,
     venv,
 		.vscode,
-		.py_env
+		.py_env,
+    src/core/settings/prod.py
 filename = *.py
 accept-encodings = utf-8
 inline-quotes = single
