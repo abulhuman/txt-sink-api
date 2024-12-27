@@ -33,6 +33,9 @@ if not DEBUG:  # type: ignore # noqa: F821 # pylint: disable=E0602
                 "PASSWORD": MYSQL_PASSWORD,
                 "HOST": MYSQL_HOST,
                 "PORT": MYSQL_PORT,
+                "OPTIONS": {
+                    "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+                },
             }
         }
 
