@@ -10,9 +10,8 @@ load_dotenv(dotenv_path=str(BASE_DIR / ".production.env"), override=True)  # typ
 
 SECRET_KEY = os.getenv("SECRET_KEY", os.getenv("TXT_SINK_SETTINGS_SECRET_KEY"))
 DEBUG = os.getenv("DEBUG", os.getenv("TXT_SINK_SETTINGS_DEBUG")) == "True"
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", os.getenv("TXT_SINK_SETTINGS_ALLOWED_HOSTS", "")).split(",")
-CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", os.getenv("TXT_SINK_SETTINGS_CORS_ALLOWED_ORIGINS",
-                                                                   "")).split(",")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", os.getenv("TXT_SINK_SETTINGS_ALLOWED_HOSTS", ""))
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", os.getenv("TXT_SINK_SETTINGS_CORS_ALLOWED_ORIGINS", ""))
 ADMIN = os.getenv("ADMIN", os.getenv("TXT_SINK_SETTINGS_ADMIN"))
 
 AWS_SM_RDS_SECRET_ID = os.getenv("AWS_SM_RDS_SECRET_ID", os.getenv("TXT_SINK_SETTINGS_AWS_SM_RDS_SECRET_ID"))
