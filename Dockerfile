@@ -14,8 +14,6 @@ RUN apt update && apt upgrade -y && \
   add-apt-repository ppa:deadsnakes/ppa && \
   apt update && \
   apt install -y python3.12 python3.12-venv pipx python3-pip pkg-config libmysqlclient-dev
-# RUN pipx ensurepath
-
 
 # Install Poetry
 RUN pipx install poetry==1.8.5 
@@ -23,15 +21,11 @@ RUN pipx ensurepath &&\
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
-RUN echo $VIRTUAL_ENV
-
 # Copy only the necessary files for dependency installation
 COPY pyproject.toml poetry.lock /app/
 
 # Install dependencies
 RUN  /root/.local/bin/poetry install --no-root
-
-RUN echo $VIRTUAL_ENV
 
 # Copy the rest of the project files
 COPY . /app/
