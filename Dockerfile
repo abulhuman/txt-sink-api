@@ -36,6 +36,8 @@ RUN echo $VIRTUAL_ENV
 # Copy the rest of the project files
 COPY . /app/
 
+RUN /root/.local/bin/poetry run python3 -m pip install uvicorn-worker
+
 # Expose port 80
 EXPOSE 80
 
