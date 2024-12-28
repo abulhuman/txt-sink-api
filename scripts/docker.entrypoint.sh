@@ -17,7 +17,13 @@ echo "Fetching IP addresses..."
 HOST_IPS=$(hostname -I)
 IFS=' ' read -r -a HOST_IP_ARRAY <<< "$HOST_IPS"
 
-ALLOWED_HOSTS="[$TXT_SINK_SETTINGS_ALLOWED_HOSTS"
+# Remove the initial and final square brackets from TXT_SINK_SETTINGS_ALLOWED_HOSTS
+TXT_SINK_SETTINGS_ALLOWED_HOSTS=${TXT_SINK_SETTINGS_ALLOWED_HOSTS:1:-1}
+
+# surround each element with single quotes
+TXT_SINK_SETTINGS_ALLOWED_HOSTS=$(echo $TXT_SINK_SETTINGS_ALLOWED_HOSTS | sed "s/,/','/g")
+
+ALLOWED_HOSTS="['${TXT_SINK_SETTINGS_ALLOWED_HOSTS//,/','}'"
 for HOST_IP in "${HOST_IP_ARRAY[@]}"; do
   ALLOWED_HOSTS="$ALLOWED_HOSTS, '$HOST_IP'"
 done
