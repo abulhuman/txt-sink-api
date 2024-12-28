@@ -13,7 +13,11 @@ class ALBSubnetDynamicAllowedHostsMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        print("[__call__] ALLOWED: ", settings.ALLOWED_HOSTS)
+        for key in dir(settings):
+            value = getattr(settings, key)
+            if key.isupper():
+                print("[DEBUG][__call__]: " + key + " = " + value)
+
         host = request.get_host().split(":")[0]
         if (
             host.startswith(TXT_SINK_APP_SUBNET_A_CIDR_PREFIX) or host.startswith(TXT_SINK_APP_SUBNET_B_CIDR_PREFIX)

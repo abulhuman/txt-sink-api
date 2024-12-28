@@ -42,6 +42,6 @@ export ALLOWED_HOSTS
 echo "Updated ALLOWED_HOSTS#Count=${#ALLOWED_HOSTS}"
 
 # Pass environment variable to Gunicorn
-TXT_SINK_SETTINGS_ALLOWED_HOSTS="$ALLOWED_HOSTS" exec  /root/.local/bin/poetry run gunicorn src.core.asgi:application -k uvicorn_worker.UvicornWorker -b :$TXT_SINK_SETTINGS_GUNICORN_PORT
+TXT_SINK_SETTINGS_ALLOWED_HOSTS="$ALLOWED_HOSTS" SECRET_KEY="$TXT_SINK_SETTINGS_SECRET_KEY" exec  /root/.local/bin/poetry run gunicorn src.core.asgi:application -k uvicorn_worker.UvicornWorker -b :$TXT_SINK_SETTINGS_GUNICORN_PORT
 
 
