@@ -16,7 +16,7 @@ class ALBSubnetDynamicAllowedHostsMiddleware:
         for key in dir(settings):
             value = getattr(settings, key)
             if key.isupper():
-                print("[DEBUG][__call__]: " + key + " = " + value)
+                print("[DEBUG][__call__]: ", key, " = ", value)
 
         host = request.get_host().split(":")[0]
         if (
