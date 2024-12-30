@@ -57,3 +57,13 @@ jobs:
           docker tag $ECR_REGISTRY/$REPOSITORY_NAME:$IMAGE_TAG $ECR_REGISTRY/$REPOSITORY_NAME:latest
           docker push $ECR_REGISTRY/$REPOSITORY_NAME:$IMAGE_TAG
           docker push $ECR_REGISTRY/$REPOSITORY_NAME:latest
+
+      - name: Deploy ECS Service with Latest Image
+        run: |
+          echo "Deployment Rollout State: $(aws ecs update-service \
+          --cluster  ${{ secrets.ECS_CLUSTER_NAME }} \
+          --service  ${{ secrets.ECS_SERVICE_NAME }} \
+          --task-definition  ${{ secrets.ECS_TASK_DEFINITION_ARN }}:${{ secrets.ECS_TASK_REVISION }} \
+          --force-new-deployment \
+          --region us-east-1 \
+          --query "service.deployments[0].rolloutState")"
