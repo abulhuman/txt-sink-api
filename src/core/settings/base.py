@@ -120,13 +120,13 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# STORAGES = {
-#     'default': {
-#         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
-#     },
-#     'staticfiles': {
-#         # "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
-#         "LOCATION": "static",
-#     },
-# }
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STORAGES = {
+    'default': {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+    'staticfiles': {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "LOCATION": "static",
+    },
+}
