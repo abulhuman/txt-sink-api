@@ -42,6 +42,10 @@ jobs:
     needs: prebuild
     runs-on: ubuntu-24.04
     steps:
+      - name: Debug prebuild outputs (needs.prebuild.outputs.login-ecr.registry)
+        run: echo ${{ needs.prebuild.outputs.login-ecr.registry }}
+      - name: Debug prebuild outputs (steps.login-ecr.registry)
+        run: echo ${{ steps.login-ecr.registry }}
       - name: Build image
         env :
           ECR_REGISTRY: ${{ needs.prebuild.outputs.login-ecr.registry }}
