@@ -15,26 +15,36 @@ concurrency:
 
 jobs:
   quality-assurance:
-    name: Quality Assurance
     uses: ./.github/workflows/pr.yml
 
-  push:
-    name: Push image to ECR
-    needs: quality-assurance
+  aws-config:
+    name: AWS Config
     runs-on: ubuntu-24.04
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: us-east-1
 
+  prebuild:
+    name: Prebuild
+    needs: [quality-assurance, aws-config]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
+        
+
+  build:
+    name: Build
+    needs: prebuild
+    runs-on: ubuntu-24.04
+    steps:
 
       - name: Cache Docker layers
         uses: actions/cache@v3
@@ -44,9 +54,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-docker-
 
-      - name: Build, tag, and push docker image to Amazon ECR
+      - name: Build and push Docker image
         env :
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REGISTRY: ${{ needs.prebuild.outputs.login-ecr.registry }}
           REPOSITORY_NAME: "cisco_test_project/txt-sink-api"
           IMAGE_TAG: ${{ github.sha }}
           DJANGO_SUPERUSER_USERNAME: ${{ secrets.DJANGO_SUPERUSER_USERNAME }}
@@ -58,12 +68,18 @@ jobs:
           docker push $ECR_REGISTRY/$REPOSITORY_NAME:$IMAGE_TAG
           docker push $ECR_REGISTRY/$REPOSITORY_NAME:latest
 
-      - name: Deploy ECS Service with Latest Image
+  deploy:
+    name: Deploy
+    needs: [build, aws-config]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Deploy to ECS
         run: |
-          echo "Deployment Rollout State: $(aws ecs update-service \
+          aws ecs update-service \
           --cluster  ${{ secrets.ECS_CLUSTER_NAME }} \
           --service  ${{ secrets.ECS_SERVICE_NAME }} \
           --task-definition  ${{ secrets.ECS_TASK_DEFINITION_ARN }}:${{ secrets.ECS_TASK_REVISION }} \
           --force-new-deployment \
           --region us-east-1 \
-          --query "service.deployments[0].rolloutState")"
+          --query 'service.{Deployment_State:rolloutState, Service_Desired_Count:desiredCount, Service_Running_Count:runningCount, Service_Status:status}' \
+          --output table || { echo "ECS Service Update Failed"; exit 1; }
