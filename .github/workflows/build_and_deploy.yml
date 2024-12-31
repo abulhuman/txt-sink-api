@@ -17,8 +17,8 @@ jobs:
   quality-assurance:
     uses: ./.github/workflows/pr.yml
 
-  prebuild:
-    name: Prebuild
+  build:
+    name: Build
     needs: quality-assurance
     runs-on: ubuntu-24.04
     steps:
@@ -28,25 +28,16 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: us-east-1
 
-      - name: Checkout code
-        uses: actions/checkout@v3
-
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-  build:
-    name: Build
-    needs: prebuild
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Debug prebuild outputs (needs.prebuild.outputs.login-ecr.registry)
-        run: echo ${{ needs.prebuild.outputs.login-ecr.registry }}
-      - name: Debug prebuild outputs (steps.login-ecr.registry)
-        run: echo ${{ steps.login-ecr.registry }}
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Build image
         env :
-          ECR_REGISTRY: ${{ needs.prebuild.outputs.login-ecr.registry }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY_NAME: "cisco_test_project/txt-sink-api"
           IMAGE_TAG: ${{ github.sha }}
           DJANGO_SUPERUSER_USERNAME: ${{ secrets.DJANGO_SUPERUSER_USERNAME }}
@@ -67,6 +58,12 @@ jobs:
     needs: build
     runs-on: ubuntu-24.04
     steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
       - name: Deploy to ECS
         run: |
           aws ecs update-service \
