@@ -21,7 +21,7 @@ s3 = boto3.client(
     aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
     aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
     endpoint_url=settings.AWS_S3_ENDPOINT_URL,
-    region_name=settings.AWS_REGION
+    region_name=settings.AWS_REGION,
 )
 s3_bucket_name = settings.AWS_STORAGE_BUCKET_NAME
 
@@ -89,8 +89,8 @@ def get_file(_, file_id: int):
     if not file_id:
         return Response({"error": "No file_id provided"}, status=400)
     try:
-        file = Files.objects.get(id=file_id)
-    except Files.DoesNotExist:
+        file = Files.objects.get(id=file_id)  # pylint: disable=E0602
+    except Files.DoesNotExist:  # pylint: disable=E0602
         return Response({"error": "File not found"}, status=404)
     serializer = FileDetailSerializer(file)
     return Response(serializer.data)
@@ -107,7 +107,7 @@ def list_files(request: Request):
     if search_by == "contents":
         return search_files_by_contents(request)
     if not search_by:
-        files = Files.objects.all()
+        files = Files.objects.all()  # pylint: disable=E0602
         serializer = FileListSerializer(files, many=True)
         return Response(serializer.data)
     return Response(
@@ -122,8 +122,7 @@ def search_files_by_tags(request: Request):
     if not tags:
         return Response({"error": "No tags provided"}, status=400)
 
-    files = Files.objects.filter(tags__contains=tags)
-    # return Response({"files": files})
+    files = Files.objects.filter(tags__contains=tags)  # pylint: disable=E0602
     serializer = FileListSerializer(files, many=True)
     return Response(serializer.data)
 
@@ -134,7 +133,7 @@ def search_files_by_name(request: Request):
     if not name:
         return Response({"error": "No name provided"}, status=400)
 
-    files = Files.objects.filter(name__contains=name)
+    files = Files.objects.filter(name__contains=name)  # pylint: disable=E0602
     serializer = FileListSerializer(files, many=True)
     return Response(serializer.data)
 
@@ -145,7 +144,7 @@ def search_files_by_contents(request: Request):
     if not contents:
         return Response({"error": "No contents provided"}, status=400)
 
-    files = Files.objects.filter(contents__contains=contents)
+    files = Files.objects.filter(contents__contains=contents)  # pylint: disable=E0602
     serializer = FileListSerializer(files, many=True)
     return Response(serializer.data)
 
@@ -156,8 +155,8 @@ def delete_file(_, file_id: int):
     if not file_id:
         return Response({"error": "No file_id provided"}, status=400)
     try:
-        file = Files.objects.get(id=file_id)
-    except Files.DoesNotExist:
+        file = Files.objects.get(id=file_id)  # pylint: disable=E0602
+    except Files.DoesNotExist:  # pylint: disable=E0602
         return Response({"error": "File not found"}, status=404)
     file.delete()
     s3.delete_object(Bucket=s3_bucket_name, Key=file.name)
