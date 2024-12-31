@@ -21,8 +21,6 @@ jobs:
     name: Prebuild
     needs: quality-assurance
     runs-on: ubuntu-24.04
-    outputs:
-      login-ecr: ${{ steps.login-ecr.outputs }}
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
