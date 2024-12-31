@@ -46,9 +46,17 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$REPOSITORY_NAME:$IMAGE_TAG .
       - name: Tag image
+        env :
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY_NAME: "cisco_test_project/txt-sink-api"
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           docker tag $ECR_REGISTRY/$REPOSITORY_NAME:$IMAGE_TAG $ECR_REGISTRY/$REPOSITORY_NAME:latest
       - name: Push image
+        env :
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY_NAME: "cisco_test_project/txt-sink-api"
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           docker push $ECR_REGISTRY/$REPOSITORY_NAME:$IMAGE_TAG && \
           docker push $ECR_REGISTRY/$REPOSITORY_NAME:latest
