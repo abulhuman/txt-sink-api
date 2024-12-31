@@ -17,9 +17,12 @@ jobs:
   quality-assurance:
     uses: ./.github/workflows/pr.yml
 
-  aws-config:
-    name: AWS Config
+  prebuild:
+    name: Prebuild
+    needs: quality-assurance
     runs-on: ubuntu-24.04
+    outputs:
+      login-ecr: ${{ steps.login-ecr.outputs }}
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -27,22 +30,12 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: us-east-1
 
-  prebuild:
-    name: Prebuild
-    needs: [quality-assurance, aws-config]
-    runs-on: ubuntu-24.04
-    outputs:
-      login-ecr: ${{ steps.login-ecr.outputs }}
-    steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
-        env:
-          AWS_REGION: us-east-1
-        
 
   build:
     name: Build
@@ -74,7 +67,7 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: [build, aws-config]
+    needs: build
     runs-on: ubuntu-24.04
     steps:
       - name: Deploy to ECS
