@@ -29,7 +29,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -40,16 +40,7 @@ jobs:
     needs: prebuild
     runs-on: ubuntu-24.04
     steps:
-
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-docker-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-docker-
-
-      - name: Build and push Docker image
+      - name: Build image
         env :
           ECR_REGISTRY: ${{ needs.prebuild.outputs.login-ecr.registry }}
           REPOSITORY_NAME: "cisco_test_project/txt-sink-api"
@@ -59,8 +50,12 @@ jobs:
           DJANGO_SUPERUSER_EMAIL: ${{ secrets.DJANGO_SUPERUSER_EMAIL }}
         run: |
           docker build -t $ECR_REGISTRY/$REPOSITORY_NAME:$IMAGE_TAG .
+      - name: Tag image
+        run: |
           docker tag $ECR_REGISTRY/$REPOSITORY_NAME:$IMAGE_TAG $ECR_REGISTRY/$REPOSITORY_NAME:latest
-          docker push $ECR_REGISTRY/$REPOSITORY_NAME:$IMAGE_TAG
+      - name: Push image
+        run: |
+          docker push $ECR_REGISTRY/$REPOSITORY_NAME:$IMAGE_TAG && \
           docker push $ECR_REGISTRY/$REPOSITORY_NAME:latest
 
   deploy:
