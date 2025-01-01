@@ -3,7 +3,7 @@ name = "txt_sink_api"
 version = "0.1.0"
 description = "API for Dockerized Django Web Application with AWS (Amazon Web Services) Integration"
 authors = ["Adem Mohammed <abulhuman.dev@gmail.com>"]
-readme = "README.rst"
+readme = "README.md"
 packages = [{include = "src"}]
 
 [tool.poetry.dependencies]
@@ -28,6 +28,7 @@ pynacl = "^1.5.0"
 uvicorn = "^0.34.0"
 gunicorn = "^23.0.0"
 python-dotenv = "^1.0.1"
+pytest-cov = "^6.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -44,6 +45,13 @@ align_closing_bracket_with_visual_indent = true
 coalesce_brackets = true
 column_limit = 120
 dedent_closing_brackets = true
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "src.core.settings"
+django_find_project = false
+python_files = "test_*.py"
+testpaths = ["src"]
+filterwarnings = "ignore::DeprecationWarning:^(?!node\\.).*:"
 
 [build-system]
 requires = ["poetry-core"]
