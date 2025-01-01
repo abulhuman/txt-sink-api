@@ -24,10 +24,10 @@ shell:
 	poetry run python -m src.manage shell
 
 test:
-	pytest -v --disable-warnings -rs -n auto --show-capture=no
+	poetry run pytest -v --disable-warnings -rs -n auto --show-capture=no
 
 test-dev:
-	pytest -v -rs -n auto
+	poetry run pytest -v -rs -n auto
 
 update:
 	install migrate
