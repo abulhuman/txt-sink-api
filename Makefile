@@ -24,7 +24,7 @@ shell:
 	poetry run python -m src.manage shell
 
 test:
-	poetry run pytest -v --disable-warnings -rs -n auto --show-capture=no
+	ls -lh && poetry run pytest -v --disable-warnings -rs -n auto --show-capture=no
 
 test-dev:
 	poetry run pytest -v -rs -n auto
