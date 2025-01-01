@@ -48,4 +48,7 @@ jobs:
       run: make lint
 
     - name: Run Tests
-      run: ls -alh &&  make test
+      run: |
+        source .venv/bin/activate
+        export PYTHONPATH=$PYTHONPATH:/home/runner/work/txt-sink-api/txt-sink-api/src
+        ls -alh &&  make test
