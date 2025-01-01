@@ -27,7 +27,13 @@ class FileListSerializer(serializers.ModelSerializer):
 
 
 class FileCreateSerializer(serializers.ModelSerializer):
-    """Serializer for the files model."""
+    """Serializer for the files model.
+
+    fields:
+    name: str
+    contents: str
+    tags: str
+    """
 
     class Meta:
         """Meta class for the serializer."""

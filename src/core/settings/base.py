@@ -15,8 +15,13 @@ from typing import List
 DEBUG = False
 SECRET_KEY = NotImplemented
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
+ALLOWED_HOSTS: List[str] = ["*"]
 CORS_ALLOWED_ORIGINS: List[str] = []
+CORS_ALLOWED_ALL_ORIGINS = True
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
 # Application definition
 
@@ -31,7 +36,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "corsheaders",
     "storages",
-    "files.apps.FilesConfig",
+    "src.apps.files.apps.FilesConfig",
 ]
 
 MIDDLEWARE = [
@@ -73,11 +78,15 @@ ASGI_APPLICATION = "src.core.asgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'txt_sink_db',
-        'USER': 'txt_sink',
-        'PASSWORD': 'txt_sink',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
         'HOST': '127.0.0.1',
         'PORT': 3306,
+        'ATOMIC_REQUESTS': True,
+        'OPTIONS': {
+            'init_command': "SET sql mode 'STRICT_TRANS_TABLES'",
+        },
     }
 }
 

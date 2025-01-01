@@ -1,3 +1,5 @@
+""" Development settings """
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -27,10 +29,10 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 
 
-LOGGING['formatters']['colored'] = {  # type: ignore # noqa: F821
+LOGGING['formatters']['colored'] = {  # type: ignore # noqa: F821 # pylint: disable=E0602
     '()': 'colorlog.ColoredFormatter',
     'format': '%(log_color)s%(asctime)s %(levelname)s %(name)s %(bold_white)s%(message)s',
 }
-LOGGING['loggers']['src']['level'] = 'DEBUG'  # type: ignore # noqa: F821
-LOGGING['handlers']['console']['level'] = 'DEBUG'  # type: ignore # noqa: F821
-LOGGING['handlers']['console']['formatter'] = 'colored'  # type: ignore # noqa: F821
+LOGGING['loggers']['src']['level'] = 'DEBUG'  # type: ignore # noqa: F821 # pylint: disable=E0602
+LOGGING['handlers']['console']['level'] = 'DEBUG'  # type: ignore # noqa: F821 # pylint: disable=E0602
+LOGGING['handlers']['console']['formatter'] = 'colored'  # type: ignore # noqa: F821 # pylint: disable=E0602
