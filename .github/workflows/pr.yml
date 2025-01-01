@@ -51,6 +51,5 @@ jobs:
       run: |
         mkdir -p local
         cp src/core/settings/templates/settings.unittests.py ./local/settings.unittests.py
-        source .venv/bin/activate
         export PYTHONPATH=$PYTHONPATH:/home/runner/work/txt-sink-api/txt-sink-api/src
         ls -alh &&  make test
