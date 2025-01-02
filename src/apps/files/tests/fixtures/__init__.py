@@ -1,3 +1,3 @@
 """ Module for files fixtures. """
 
-from .files import *  # noqa
+from .fixture_files import *  # noqa

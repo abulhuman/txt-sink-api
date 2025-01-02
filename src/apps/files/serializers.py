@@ -2,10 +2,12 @@
 
 from rest_framework import serializers
 
+from src.general.serializers import CreatedModifiedSerializer
+
 from .models import Files
 
 
-class FileDetailSerializer(serializers.ModelSerializer):
+class FileDetailSerializer(CreatedModifiedSerializer):
     """Serializer for the files model."""
 
     class Meta:
@@ -22,8 +24,7 @@ class FileListSerializer(serializers.ModelSerializer):
         """Meta class for the serializer."""
 
         model = Files
-        # fields = ["id", "name", "size"]
-        fields = "__all__"
+        fields = ["id", "modified_date", "name", "size", "tags", "uri"]
 
 
 class FileCreateSerializer(serializers.ModelSerializer):

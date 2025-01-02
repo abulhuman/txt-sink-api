@@ -120,7 +120,7 @@ def list_files(request: Request):
 
 
 def search_files_by_tags(request: Request):
-    """Search files by tags"""
+    """Search files by tags __ contains"""
     tags = request.query_params.get("q")
     if not tags:
         return Response({"error": "No tags provided"}, status=400)
@@ -131,7 +131,7 @@ def search_files_by_tags(request: Request):
 
 
 def search_files_by_name(request: Request):
-    """Search files by name"""
+    """Search files by name __ contains"""
     name = request.query_params.get("q")
     if not name:
         return Response({"error": "No name provided"}, status=400)
@@ -142,7 +142,7 @@ def search_files_by_name(request: Request):
 
 
 def search_files_by_contents(request: Request):
-    """Search files by contents"""
+    """Search files by contents __ contains"""
     contents = request.query_params.get("q")
     if not contents:
         return Response({"error": "No contents provided"}, status=400)

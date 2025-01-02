@@ -27,7 +27,7 @@ test:
 	poetry run pytest -v --disable-warnings -rs -n auto --show-capture=no
 
 test-dev:
-	poetry run pytest -v -rs -n auto
+	poetry run pytest -v
 
 update:
 	install migrate

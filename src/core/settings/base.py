@@ -81,7 +81,7 @@ DATABASES = {
         'NAME': '',
         'USER': '',
         'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        'HOST': '',
         'PORT': 3306,
         'ATOMIC_REQUESTS': True,
         'OPTIONS': {

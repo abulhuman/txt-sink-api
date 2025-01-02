@@ -5,6 +5,13 @@ from unittest.mock import patch
 
 import pytest
 from model_bakery import baker
+from rest_framework.reverse import reverse
+
+
+@pytest.fixture
+def upload_url():
+    """Fixture to create an upload URL."""
+    return reverse("upload")
 
 
 @pytest.fixture
@@ -16,23 +23,23 @@ def txt_file():
         name="test_file.txt",
         size=0,
         contents="",
-        tags="test",
+        tags="",
     )
 
 
 @pytest.fixture(scope="function")
-def file_with_tags():
+def txt_file_with_tags():
     """Fixture to create a File instance with tags."""
     file = baker.make(
-        "apps.files.Files",
+        "files.Files",
         _fill_optional=True,
         name="test_file.txt",
         size=1000,
         contents="test file contents",
-        tags="tag1,tag2",
+        tags="tag-one,tag-two",
     )
-    baker.make("apps.files.SearchTags", file=file, tag_name="tag1")
-    baker.make("apps.files.SearchTags", file=file, tag_name="tag2")
+    baker.make("files.SearchTags", file=file, tag_name="tag-one")
+    baker.make("files.SearchTags", file=file, tag_name="tag-two")
     return file
 
 

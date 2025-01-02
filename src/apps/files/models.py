@@ -18,7 +18,7 @@ class Files(CreatedModified):
         return str(self.name)
 
     def __repr__(self):
-        return str(f"📄; id={self.id} - {self.name}")
+        return str(f"📄; id={self.id} - {self.name} - tags={self.tags}")
 
     class Meta:
         """Meta class for the model"""
