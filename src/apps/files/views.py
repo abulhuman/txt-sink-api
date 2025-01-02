@@ -53,19 +53,16 @@ def upload(request: Request) -> Response:
         s3_file_name = file.name
         s3.put_object(
             Bucket=s3_bucket_name,
-            Key=s3_file_name,
+            Key=f"uploads/{s3_file_name}",
             Body=file_contents,
             ContentType=file.content_type,
         )
-        # TODO: set the `s3_object_URL` variable to the public URL of the file
-        s3_object_uri = (
-            f"{settings.AWS_S3_ENDPOINT_URL}/{s3_bucket_name}/{s3_file_name}"
-            if settings.DEBUG else f"s3://{s3_bucket_name}/{s3_file_name}"
-        )
+        s3_object_url = f"https://{s3_bucket_name}.s3.{settings.AWS_REGION}.amazonaws.com/uploads/{s3_file_name}"
+        s3_object_url = s3_object_url.replace(" ", "+")
 
         file = Files(
             name=file.name,
-            uri=s3_object_uri,
+            url=s3_object_url,
             size=file.size,
             contents=file_contents,
             tags=tags,
@@ -77,7 +74,7 @@ def upload(request: Request) -> Response:
         return Response(
             {
                 "message": "File uploaded successfully",
-                "s3_uri": s3_object_uri
+                "s3_object_url": s3_object_url
             },
             status=201,
         )

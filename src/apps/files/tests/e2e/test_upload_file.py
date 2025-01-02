@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 import pytest
 from botocore.exceptions import NoCredentialsError
+from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -20,9 +21,15 @@ class TestUploadFile:
         file = SimpleUploadedFile("test_file.txt", f"{'a' * 600}".encode("utf-8"), content_type="text/plain")
         file_json = {"file": file, "tags": "test_tag"}
         response = api_client.post(upload_url, file_json, format="multipart")
+        s3_object_url = (
+            "https://" + settings.AWS_STORAGE_BUCKET_NAME + ".s3." + settings.AWS_DEFAULT_REGION +
+            ".amazonaws.com/uploads/test_file.txt"
+        ).replace(" ", "+")
         assert response.status_code == status.HTTP_201_CREATED
         assert response.data["message"] == "File uploaded successfully"
-        # assert response.data["s3_object_URL"] == f"https://"
+        print(response.data)
+        s3_file_save.assert_called_once()
+        assert response.data["s3_object_url"] == s3_object_url
         assert Files.objects.count() == 1  # pylint: disable=E1101
         assert Files.objects.first().tags == "test_tag"  # pylint: disable=E1101
         assert Files.objects.first().size == 600  # pylint: disable=E1101

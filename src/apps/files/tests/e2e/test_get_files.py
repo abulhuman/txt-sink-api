@@ -25,7 +25,7 @@ class TestGetFiles:
         response_formatted_modified_date = datetime.fromisoformat(response.data[0]["modified_date"]
                                                                   ).strftime(DATE_FORMAT)
         assert response_formatted_modified_date == txt_file_formatted_modified_date
-        assert response.data[0]["uri"] == txt_file.uri
+        assert response.data[0]["url"] == txt_file.url
 
     def test_should_200_when_with_tags(self, api_client, txt_file_with_tags):
         """Test getting files."""
@@ -40,7 +40,7 @@ class TestGetFiles:
         response_formatted_modified_date = datetime.fromisoformat(response.data[0]["modified_date"]
                                                                   ).strftime(DATE_FORMAT)
         assert response_formatted_modified_date == txt_file_formatted_modified_date
-        assert response.data[0]["uri"] == txt_file_with_tags.uri
+        assert response.data[0]["url"] == txt_file_with_tags.url
 
     def test_should_200_when_search_by_is_tags_and_q_exists(self, api_client, txt_file_with_tags):
         """Test getting files."""
@@ -55,7 +55,7 @@ class TestGetFiles:
         response_formatted_modified_date = datetime.fromisoformat(response.data[0]["modified_date"]
                                                                   ).strftime(DATE_FORMAT)
         assert response_formatted_modified_date == txt_file_formatted_modified_date
-        assert response.data[0]["uri"] == txt_file_with_tags.uri
+        assert response.data[0]["url"] == txt_file_with_tags.url
 
     def test_should_200_when_search_by_is_tags_and_q_does_not_exist(
         self,
@@ -79,7 +79,7 @@ class TestGetFiles:
         response_formatted_modified_date = datetime.fromisoformat(response.data[0]["modified_date"]
                                                                   ).strftime(DATE_FORMAT)
         assert response_formatted_modified_date == txt_file_formatted_modified_date
-        assert response.data[0]["uri"] == txt_file_with_tags.uri
+        assert response.data[0]["url"] == txt_file_with_tags.url
 
     def test_should_200_when_search_by_is_name_and_q_does_not_exist(
         self,
@@ -103,7 +103,7 @@ class TestGetFiles:
         response_formatted_modified_date = datetime.fromisoformat(response.data[0]["modified_date"]
                                                                   ).strftime(DATE_FORMAT)
         assert response_formatted_modified_date == txt_file_formatted_modified_date
-        assert response.data[0]["uri"] == txt_file_with_tags.uri
+        assert response.data[0]["url"] == txt_file_with_tags.url
 
     def test_should_200_when_search_by_is_contents_and_q_does_not_exist(
         self,
