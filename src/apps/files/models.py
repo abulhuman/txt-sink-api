@@ -9,7 +9,7 @@ class Files(CreatedModified):
     """Model for files"""
     id = models.AutoField(primary_key=True)  # noqa A003
     name = models.CharField(max_length=255)
-    uri = models.URLField()
+    url = models.URLField()
     size = models.IntegerField()
     contents = models.TextField()
     tags = models.CharField(max_length=255)
@@ -18,7 +18,7 @@ class Files(CreatedModified):
         return str(self.name)
 
     def __repr__(self):
-        return str(f"📄; id={self.id} - {self.name}")
+        return str(f"📄; id={self.id} - {self.name} - tags={self.tags}")
 
     class Meta:
         """Meta class for the model"""

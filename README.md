@@ -38,6 +38,7 @@ Copy `settings.dev.py` and update the local environment variables with your own 
 ```bash
 mkdir -p local
 cp src/core/settings/templates/settings.dev.py ./local/settings.dev.py
+cp src/core/settings/templates/settings.unittests.py ./local/settings.unittests.py
 ```
 
 ### 4. Start the dependency containers

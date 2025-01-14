@@ -23,10 +23,10 @@ deep_update(
 
 try:
     if os.path.exists(LOCAL_SETTINGS_PATH):  # type: ignore # noqa: F821 # pylint: disable=E0602
-        if DEBUG and not LOCAL_SETTINGS_PATH.split(".")[1] == "dev":  # type: ignore # noqa: F821,E501 # pylint: disable=E0602
+        if DEBUG and LOCAL_SETTINGS_PATH.split(".")[1] not in ["dev", "unittests"]:  # type: ignore # noqa: F821,E501 # pylint: disable=E0602
             raise ValueError(
-                """Local settings path file name must have 'dev' in it, \
-when running in DEBUG=True; eg. 'local/settings.dev.py'"""
+                """Local settings path file name must have 'dev' or 'unittests' in it, \
+when running in DEBUG=True; eg. 'local/settings.dev.py', 'local/settings.unittests.py'"""
             )
         if not DEBUG and not LOCAL_SETTINGS_PATH.split(".")[1] == "prod":  # type: ignore # noqa: F821,E501 # pylint: disable=E0602
             raise ValueError(

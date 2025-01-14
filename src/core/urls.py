@@ -10,5 +10,5 @@ from . import views
 urlpatterns = [
     path("health/", views.health, name="health"),
     path("admin/", admin.site.urls),
-    path("files/", include("files.urls")),
+    path("files/", include("src.apps.files.urls")),
 ]

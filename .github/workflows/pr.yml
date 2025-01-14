@@ -38,6 +38,9 @@ jobs:
         path: ./.venv
         key: venv-${{ hashFiles('poetry.lock') }}
 
+    - name: Activate the virtual environment
+      run: source .venv/bin/activate
+
     - name: Install Dependencies
       run: poetry install --no-root
 
@@ -45,4 +48,8 @@ jobs:
       run: make lint
 
     - name: Run Tests
-      run: echo "Running tests (coming soon...)"
+      run: |
+        mkdir -p local
+        cp src/core/settings/templates/settings.unittests.py ./local/settings.unittests.py
+        export PYTHONPATH=$PYTHONPATH:/home/runner/work/txt-sink-api/txt-sink-api/src
+        ls -alh &&  make test

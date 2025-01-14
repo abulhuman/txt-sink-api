@@ -1,6 +1,6 @@
 PHONY: install migrate migrations start_dev install-pre-commit lint superuser shell test update dev-db-up dev-db-down
 install:
-	poetry install
+	poetry install --no-root
 
 migrate:
 	poetry run python -m src.manage migrate
@@ -24,7 +24,10 @@ shell:
 	poetry run python -m src.manage shell
 
 test:
-	pytest -v --disable-warnings
+	poetry run pytest -v --disable-warnings -rs -n auto --show-capture=no
+
+test-dev:
+	poetry run pytest -v
 
 update:
 	install migrate

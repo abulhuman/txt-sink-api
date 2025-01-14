@@ -1,4 +1,4 @@
-"""This script is used to generate a new account and secret key for the Django project."""
+"""This script is used to generate a new superuser account and secret key for the Django project."""
 
 import sys
 
@@ -9,18 +9,18 @@ from src.general.utils.cryptography import generate_key_pair
 
 def generate_account():
     """
-    Generates a new account by creating a key pair and prints the signing key and account number.
+    Generates a new account by creating a key pair and prints the username and password.
 
     The function generates a key pair using the `generate_key_pair` function,
-    then prints the private key (referred to as the signing key)
-    and the public key (referred to as the account number).
+    then prints the private key (referred to as the username)
+    and the public key (referred to as the password).
 
     Returns:
         None
     """
     key_pair = generate_key_pair()
-    print(f"SIGNING_KEY={key_pair.private}")
-    print(f"ACCOUNT_NUMBER={key_pair.public}")
+    print(f"USERNAME={key_pair.private}")
+    print(f"PASSWORD={key_pair.public}")
 
 
 def generate_secret_key():
@@ -28,7 +28,7 @@ def generate_secret_key():
     Generates a random secret key and prints it.
 
     This function uses the `get_random_secret_key` function to generate a
-    random secret key and then prints it in the format "SECRET_KEY: <secret_key>".
+    random secret key and then prints it in the format "SECRET_KEY=<secret_key>".
 
     Returns:
         None
